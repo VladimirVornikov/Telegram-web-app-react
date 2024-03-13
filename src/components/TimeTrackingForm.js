@@ -28,7 +28,7 @@ const TimeTrackingForm = () => {
         Description:
         <select className={style.select} name="sort_category" 
             onChange={(e) => setDescription(e.target.value)} value={description}>
-              <option value="">by default</option>
+              <option value="">By default</option>
               <option value="Work">Work</option>
               <option value="Study">Study</option>
               <option value="Free time">Free time</option>
@@ -41,8 +41,11 @@ const TimeTrackingForm = () => {
         Duration (hours):
         <input type="number" value={duration} onChange={(e) => setDuration(e.target.value)}/>
       </label>
-      <input type="date" max = {formattedString}  onChange={(e) => setUserDate(e.target.value)}/>
-      <button type="submit">Add Entry</button>
+      <label>
+        Date:
+        <input type="date" max = {formattedString}  onChange={(e) => setUserDate(e.target.value)}/>
+      </label>
+      <button type="submit" className={style.button_add}>Add Entry</button>
     </form>
   );
 };

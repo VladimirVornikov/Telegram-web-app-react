@@ -1,0 +1,33 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
+body {
+  background: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+}
+
+
+main {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.close_button {
+  margin-top: 40px;
+  width: 120px;
+  height: 30px;
+  background-color: rgb(0, 128, 128);
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 10%;
+}
+

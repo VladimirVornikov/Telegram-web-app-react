@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import './App.css';
+import style from './App.module.css';
 import TimeTrackingForm from './components/TimeTrackingForm';
 import TimeEntry from './components/TimeEntry';
 import { useSelector } from 'react-redux';
@@ -21,17 +21,17 @@ function App() {
   }
 
   return (
-    <div style={{marginLeft: "10px"}}>
+    <main>
       <h1>Time Tracking App</h1>
       <TimeTrackingForm />
-      <h2>Total Time: {totalTime} hours</h2>
+      <h2>Total time: {totalTime} {totalTime > 1 ? 'hours' : "hour"}</h2>
       <h3>Entries:</h3>
       <Select/>
       {entries.map((entry, index) => (
         entry.visible? <TimeEntry key={index} entry={entry} index={index}/> : null
       ))}
-      <button onClick={onClose}>Close</button>
-    </div>
+      <button onClick={onClose} className={style.close_button}>Close</button>
+    </main>
   );
 }
 
