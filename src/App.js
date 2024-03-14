@@ -5,7 +5,6 @@ import TimeEntry from './components/TimeEntry';
 import { useSelector } from 'react-redux';
 import { selectTime } from './features/timeSlice';
 import Select from './components/Select';
-import { useTelegram } from './useTelegram/useTelegram';
 import Webcam from 'react-webcam'
 import { useRef } from 'react';
 
@@ -15,27 +14,26 @@ function App() {
   const [picture, setPicture] = useState(null);
   const webRef = useRef(null);
 
-  const {tg, queryId} = useTelegram();
+  const tg = window.Telegram.WebApp;
 
   useEffect(() => {
     tg.ready();
   }, [])
 
   const onSendData = useCallback(() => {
-    tg.close()
     const data = {
-        totalTime: totalTime,
-        queryId,
+      totalTime,
+      picture
     }
-    console.log(data);
-    fetch('http://localhost:8000/web-data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-  }, [totalTime, tg, queryId])
+    tg.sendData(JSON.stringify(data))
+  }, [totalTime, picture])
+
+  useEffect(() => {
+    tg.onEvent("close_button", onSendData)
+    return () => {
+      tg.offEvent('close_button', onSendData)
+    }
+  }, [onSendData])
 
   const toggleCamera = () => {
     setIsCameraOpen(prevState => !prevState);
@@ -64,7 +62,7 @@ function App() {
           {picture && <img src={picture} className={style.picture} alt="Captured" />}
         </div>
       )}
-      <button onClick={onSendData} className={style.close_button}>Close</button>
+      <button  className={style.close_button}>Close</button>
     </main>
   );
 }
