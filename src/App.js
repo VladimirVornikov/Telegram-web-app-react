@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import React, { useCallback, useEffect, useState } from 'react';
 import style from './App.module.css';
 import TimeTrackingForm from './components/TimeTrackingForm';
@@ -23,10 +22,12 @@ function App() {
   }, [])
 
   const onSendData = useCallback(() => {
+    tg.close()
     const data = {
         totalTime: totalTime,
         queryId,
     }
+    console.log(data);
     fetch('http://localhost:8000/web-data', {
         method: 'POST',
         headers: {
@@ -34,15 +35,7 @@ function App() {
         },
         body: JSON.stringify(data)
     })
-    .then(() => {
-      setIsCameraOpen(false);
-      tg.sendMessage(tg.chatId, `You spent ${totalTime} hours.`);
-      tg.close();
-    })
-    .catch(error => {
-      console.error('Error sending data:', error);
-    });
-}, [totalTime, tg, queryId]);
+  }, [totalTime, tg, queryId])
 
   const toggleCamera = () => {
     setIsCameraOpen(prevState => !prevState);
