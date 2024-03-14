@@ -18,7 +18,7 @@ function App() {
   console.log(tg);
 
   useEffect(() => {
-    tg.expand();
+    tg.ready();
   }, []);
 
   const onSendData = useCallback(() => {
@@ -50,7 +50,7 @@ function App() {
   };
 
   return (
-    <main className={style.twa_container}>
+    <main>
       <h1>Time Tracking App</h1>
       <TimeTrackingForm />
       <h2>Total time: {totalTime} {totalTime > 1 ? 'hours' : "hour"}</h2>
@@ -67,6 +67,7 @@ function App() {
           {picture && <img src={picture} className={style.picture} alt="Captured" />}
         </div>
       )}
+      <button onClick={() => tg.expand()}>X</button>
       <button onClick={handleMainButtonClick} className={style.close_button}>Close</button>
     </main>
   );
