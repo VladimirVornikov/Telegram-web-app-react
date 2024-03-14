@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addEntry } from '../features/timeSlice';
 import style from "./TimeTrackingForm.module.css"
+import { addEntry } from '../features/timeSlice';
+import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 
 const TimeTrackingForm = () => {
   const [description, setDescription] = useState('');

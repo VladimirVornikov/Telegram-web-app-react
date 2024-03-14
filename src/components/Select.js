@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
 import { sortBySelect } from '../features/timeSlice';
+import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react'
 
 export default function Select() {
     const dispatch = useDispatch();
@@ -8,7 +8,6 @@ export default function Select() {
     function handleSelect(e) {
         dispatch(sortBySelect(e.target.value))
     }
-
 
     return (
         <select onChange={handleSelect}>

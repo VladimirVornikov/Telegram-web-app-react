@@ -1,7 +1,7 @@
-import React from 'react';
+import { changeValue, deleteActivity } from '../features/timeSlice';
 import style from "./TimeEntry.module.css"
 import { useDispatch } from 'react-redux';
-import { changeValue, deleteActivity } from '../features/timeSlice';
+import React from 'react';
 
 function TimeEntry(props) {
   const { index, entry } = props;
