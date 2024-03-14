@@ -66,6 +66,7 @@ function App() {
           {picture && <img src={picture} className={style.picture} alt="Captured" />}
         </div>
       )}
+      <button onClick={() => tg.expand()}>X</button>
       <button onClick={handleMainButtonClick} className={style.close_button}>Close</button>
     </main>
   );
