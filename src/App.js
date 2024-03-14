@@ -61,7 +61,7 @@ function App() {
       <button onClick={toggleCamera} className={style.close_button}>Toggle Camera</button>
       {isCameraOpen && (
         <div className={style.camera_container}>
-          <Webcam style={{ width: "25%" }} ref={webRef}/>
+          <Webcam className={style.camera} ref={webRef}/>
           <button onClick={takePicture} className={style.image_picture}>Take Picture</button>
           {picture && <img src={picture} className={style.picture} alt="Captured" />}
         </div>
