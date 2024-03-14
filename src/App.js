@@ -37,6 +37,7 @@ function App() {
     .then(() => {
       setIsCameraOpen(false);
       tg.sendMessage(tg.chatId, `You spent ${totalTime} hours.`);
+      tg.close();
     })
     .catch(error => {
       console.error('Error sending data:', error);
