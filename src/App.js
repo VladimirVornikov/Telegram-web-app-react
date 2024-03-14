@@ -5,7 +5,7 @@ import TimeEntry from './components/TimeEntry';
 import { useSelector } from 'react-redux';
 import { selectTime } from './features/timeSlice';
 import Select from './components/Select';
-import Webcam from 'react-webcam'
+import Webcam from 'react-webcam';
 import { useRef } from 'react';
 
 function App() {
@@ -18,31 +18,35 @@ function App() {
 
   useEffect(() => {
     tg.ready();
-  }, [])
+  }, []);
 
   const onSendData = useCallback(() => {
     const data = {
       totalTime,
-      picture
-    }
-    tg.sendData(JSON.stringify(data))
-  }, [totalTime, picture])
+    };
+    tg.sendData(JSON.stringify(data));
+    tg.close();
+  }, [totalTime]);
 
   useEffect(() => {
-    tg.onEvent("close_button", onSendData)
+    tg.onEvent("MainButton", onSendData);
     return () => {
-      tg.offEvent('close_button', onSendData)
-    }
-  }, [onSendData])
+      tg.offEvent("MainButton", onSendData);
+    };
+  }, [onSendData]);
 
   const toggleCamera = () => {
     setIsCameraOpen(prevState => !prevState);
-  }
+  };
 
   const takePicture = useCallback(() => {
     const picture = webRef.current.getScreenshot();
     setPicture(picture);
   }, []);
+
+  const handleMainButtonClick = () => {
+    onSendData(); 
+  };
 
   return (
     <main>
@@ -52,7 +56,7 @@ function App() {
       <h3>Entries:</h3>
       <Select/>
       {entries.map((entry, index) => (
-        entry.visible? <TimeEntry key={index} entry={entry} index={index}/> : null
+        entry.visible ? <TimeEntry key={index} entry={entry} index={index}/> : null
       ))}
       <button onClick={toggleCamera} className={style.close_button}>Toggle Camera</button>
       {isCameraOpen && (
@@ -62,7 +66,7 @@ function App() {
           {picture && <img src={picture} className={style.picture} alt="Captured" />}
         </div>
       )}
-      <button  className={style.close_button}>Close</button>
+      <button onClick={handleMainButtonClick} className={style.close_button}>Close</button>
     </main>
   );
 }
