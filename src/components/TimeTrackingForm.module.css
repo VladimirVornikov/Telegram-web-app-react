@@ -1,5 +1,5 @@
 .form {
-    width: 280px;
+    width: 400px;
     gap: 10px;
     background-color: rgb(31, 132, 132);
     display: flex;
@@ -25,7 +25,7 @@ input {
     border-radius: 10px;
     font-size: 16px;
     font-weight: 700;
-    margin-left: 25%;
+    margin-left: 33%;
 }
 
 .button_add:hover {
@@ -48,5 +48,8 @@ label {
 
 input:hover, select:hover {
     background-color: rgb(150, 212, 212);
+}
 
+h1 {
+    margin-top: 20px;
 }
