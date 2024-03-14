@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import React, { useCallback, useEffect, useState } from 'react';
 import style from './App.module.css';
 import TimeTrackingForm from './components/TimeTrackingForm';
@@ -9,13 +10,11 @@ import { useTelegram } from './useTelegram/useTelegram';
 import Webcam from 'react-webcam'
 import { useRef } from 'react';
 
-
 function App() {
   const { totalTime, entries } = useSelector(selectTime);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [picture, setPicture] = useState(null);
   const webRef = useRef(null);
-
 
   const {tg, queryId} = useTelegram();
 
@@ -24,20 +23,25 @@ function App() {
   }, [])
 
   const onSendData = useCallback(() => {
-    tg.close()
     const data = {
         totalTime: totalTime,
         queryId,
     }
-    console.log(data);
-    fetch('http://localhost:8000', {
+    fetch('http://localhost:8000/web-data', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
     })
-}, [totalTime])
+    .then(() => {
+      setIsCameraOpen(false);
+      tg.sendMessage(tg.chatId, `You spent ${totalTime} hours.`);
+    })
+    .catch(error => {
+      console.error('Error sending data:', error);
+    });
+}, [totalTime, tg, queryId]);
 
   const toggleCamera = () => {
     setIsCameraOpen(prevState => !prevState);
