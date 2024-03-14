@@ -15,9 +15,10 @@ function App() {
   const webRef = useRef(null);
 
   const tg = window.Telegram.WebApp;
+  console.log(tg);
 
   useEffect(() => {
-    tg.expand();
+    tg.ready();
   }, []);
 
   const onSendData = useCallback(() => {
@@ -49,7 +50,7 @@ function App() {
   };
 
   return (
-    <main>
+    <main className={style.twa_container}>
       <h1>Time Tracking App</h1>
       <TimeTrackingForm />
       <h2>Total time: {totalTime} {totalTime > 1 ? 'hours' : "hour"}</h2>
