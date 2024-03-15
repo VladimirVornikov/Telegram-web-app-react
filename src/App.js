@@ -18,7 +18,7 @@ function App() {
   console.log(tg);
 
   useEffect(() => {
-    tg.ready();
+    tg.expand();
   }, []);
 
   const onSendData = useCallback(() => {
