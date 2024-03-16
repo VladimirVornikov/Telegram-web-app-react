@@ -15,16 +15,16 @@ function App() {
   const webRef = useRef(null);
 
   const tg = window.Telegram.WebApp;
-  console.log(tg);
 
   useEffect(() => {
-    tg.expand();
+    tg.ready();
   }, []);
 
   const onSendData = useCallback(() => {
     const data = {
       totalTime,
     };
+    console.log(data);
     tg.sendData(JSON.stringify(data));
     tg.close();
   }, [totalTime]);
@@ -46,7 +46,13 @@ function App() {
   }, []);
 
   const handleMainButtonClick = () => {
-    onSendData(); 
+    onSendData();
+    if (picture) {
+      const link = document.createElement('a');
+      link.href = picture;
+      link.download = 'captured_image.jpg';
+      link.click();
+    }
   };
 
   return (
@@ -62,9 +68,13 @@ function App() {
       <button onClick={toggleCamera} className={style.close_button}>Toggle Camera</button>
       {isCameraOpen && (
         <div className={style.camera_container}>
-          <Webcam className={style.camera} ref={webRef}/>
+          <Webcam className={style.camera} ref={webRef} screenshotFormat='image/jpeg'/>
           <button onClick={takePicture} className={style.image_picture}>Take Picture</button>
-          {picture && <img src={picture} className={style.picture} alt="Captured" />}
+          {picture && (
+            <>
+              <img src={picture} className={style.picture} alt="Captured" />
+            </>
+          )}
         </div>
       )}
       <button onClick={handleMainButtonClick} className={style.close_button}>Close</button>
