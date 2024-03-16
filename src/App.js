@@ -46,34 +46,34 @@ function App() {
   }, []);
 
   const handleMainButtonClick = () => {
-    onSendData();
     
     const postData = {
       picture: picture
-  };
-
+    };
+    
     fetch('http://localhost:8000/postData', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    })
-    .then(response => {
-      if (!response.ok) {
+        },
+        body: JSON.stringify(postData)
+      })
+      .then(response => {
+        if (!response.ok) {
           throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Response:', data);
-    })
-    .catch(error => {
-      console.error('There was a problem with your fetch operation:', error);
-    });
-
-  };
-
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response:', data);
+      })
+      .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+      });
+      
+      onSendData();
+    };
+    
   return (
     <main>
       <h1>Time Tracking App</h1>
