@@ -8,15 +8,11 @@ import Select from './components/Select';
 import Webcam from 'react-webcam';
 import { useRef } from 'react';
 
-
 function App() {
   const { totalTime, entries } = useSelector(selectTime);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [picture, setPicture] = useState(null);
   const webRef = useRef(null);
-
-  console.log(picture);
-
   const tg = window.Telegram.WebApp;
 
   useEffect(() => {
@@ -28,17 +24,25 @@ function App() {
       totalTime,
       picture: `${url}`
     };
+    
     console.log(data);
     tg.sendData(JSON.stringify(data));
     tg.close();
-  }, [totalTime]);
+  }, [totalTime, tg]);
 
   useEffect(() => {
     tg.onEvent("MainButton", onSendData);
+    const handleUnload = () => {
+      if (picture) {
+        handleMainButtonClick();
+      }
+    };
+    window.addEventListener('beforeunload', handleUnload);
     return () => {
+      window.removeEventListener('beforeunload', handleUnload);
       tg.offEvent("MainButton", onSendData);
     };
-  }, [onSendData]);
+  }, [onSendData, picture, tg]);
 
   const toggleCamera = () => {
     setIsCameraOpen(prevState => !prevState);
@@ -50,14 +54,14 @@ function App() {
   }, []);
 
   const handleMainButtonClick = () => {
-    const pictureDataUrl = picture.split(',')[1]; 
+    if (!picture) return;
 
-  const postData = {
-    key: '7af0c8e456d8dd91c587dab2038961f4', 
-    image: pictureDataUrl,
-    name: 'image.jpg', 
-  };
-  
+    const pictureDataUrl = picture.split(',')[1]; 
+    const postData = {
+      key: '7af0c8e456d8dd91c587dab2038961f4', 
+      image: pictureDataUrl,
+      name: 'image.jpg', 
+    };
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       headers: {
@@ -73,18 +77,13 @@ function App() {
       })
       .then((data) => {
         let url = data.data.url_viewer
-        onSendData(url)
-        console.log('Response:', data.data.url_viewer);
+        onSendData(url);
       })
       .catch((error) => {
         console.error('There was a problem with your fetch operation:', error);
       });
-  
-    onSendData();
   };
-  
-  
-    
+
   return (
     <main>
       <h1>Time Tracking App</h1>
