@@ -8,11 +8,14 @@ import Select from './components/Select';
 import Webcam from 'react-webcam';
 import { useRef } from 'react';
 
+
 function App() {
   const { totalTime, entries } = useSelector(selectTime);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [picture, setPicture] = useState(null);
   const webRef = useRef(null);
+
+  console.log(picture);
 
   const tg = window.Telegram.WebApp;
 
@@ -20,9 +23,10 @@ function App() {
     tg.ready();
   }, []);
 
-  const onSendData = useCallback(() => {
+  const onSendData = useCallback((url) => {
     const data = {
       totalTime,
+      picture: `${url}`
     };
     console.log(data);
     tg.sendData(JSON.stringify(data));
@@ -46,33 +50,40 @@ function App() {
   }, []);
 
   const handleMainButtonClick = () => {
-    
-    const postData = {
-      picture: picture
-    };
-    
-    fetch('http://localhost:8000/postData', {
+    const pictureDataUrl = picture.split(',')[1]; 
+
+  const postData = {
+    key: '7af0c8e456d8dd91c587dab2038961f4', 
+    image: pictureDataUrl,
+    name: 'image.jpg', 
+  };
+  
+    fetch('http://localhost:5000/upload', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
-      })
-      .then(response => {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();
       })
-      .then(data => {
-        console.log('Response:', data);
+      .then((data) => {
+        let url = data.data.url_viewer
+        onSendData(url)
+        console.log('Response:', data.data.url_viewer);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('There was a problem with your fetch operation:', error);
       });
-      
-      onSendData();
-    };
+  
+    onSendData();
+  };
+  
+  
     
   return (
     <main>
